@@ -6,7 +6,7 @@
     // Esperamos a que el documento esté listo
     $(document).ready(function () {
         // Inicializamos el mapa en una posición y con un zoom determinados
-        map = L.map('map').setView([5.5, -75.57], 10);
+        map = L.map('map').setView([5.37, -75.65], 10);
 
         map.createPane("hillshadePane");
         map.createPane("imagePane");
@@ -26,7 +26,7 @@
             maxZoom: 19,
             opacity: 0.45,
             pane: "imagePane",
-            attribution: '&copy; <a href="https://www.mapzen.com/blog/terrain-tile-service/">Mapzen Terrain Tiles</a>'
+            attribution: '&copy; Google'
         }).addTo(map);
         L.esri.basemapLayer('ImageryLabels',{pane: "imagePane"}).addTo(map);
 
@@ -86,7 +86,7 @@
                 weight: 1, 
                 fillOpacity: 0.5,
               }),
-            new Mapa(null,'cuenca','Cuencas',0,0,0.5,cuencas, [],{
+            new Mapa(null,'cuenca','Cuencas Torrenciales',0,0,0.5,cuencas, [],{
                 color: '#149ece',
                 fillColor: '#f0300000',
                 fillOpacity: 0.5,
@@ -94,7 +94,8 @@
               }),
             new Mapa(null,'invPoint','Inventario Puntos',4,0,0.5,inv_point, [],{}),
             new Mapa(null,'invPoly','Inventario Poligonos',3,0,0.5,inv_poly, [],{}),
-            new Mapa(null,'invExt','Inventario Externo',2,0,0.5,eventos_externos, [],{}),
+            new Mapa(null,'invne','Inventario Lineas',3,0,0.5,inv_line, [],{}),
+            new Mapa(null,'invExt','Inventario Info Secundaria',2,0,0.5,eventos_externos, [],{}),
             new Mapa(null,'geo','Geología',1,0,0.5,'https://services7.arcgis.com/gTVMpnerZFjZtXQb/arcgis/rest/services/Geologia_final/FeatureServer/0', ["FID", "Geo"],{}),
             new Mapa(null,'geomorfo','Geomorfología',1,0,0.5,'https://services7.arcgis.com/gTVMpnerZFjZtXQb/arcgis/rest/services/Geomorfologia_final/FeatureServer/0', ["FID", "Geoforma"],{}),
           ];
@@ -140,9 +141,9 @@
             else if(insumosGenerales[i].aux == 4){
                 insumosGenerales[i].capa = L.geoJSON(insumosGenerales[i].url, {
                     onEachFeature: function (feature, layer) {
-                        if (feature.properties && feature.properties.proceso === 'Movimiento en Masa') {
+                        if (feature.properties && feature.properties.Proceso === 'Movimiento en Masa') {
                             layer.setIcon(markerCat);
-                            } else if (feature.properties && feature.properties.proceso === 'Erosión') {
+                            } else if (feature.properties && feature.properties.Proceso === 'Erosión') {
                                 layer.setIcon(markerInv);
                             } 
                             else {
@@ -163,13 +164,13 @@
                     onEachFeature: function (feature, layer) {
                         if (feature.properties) {
 
-                            if (feature.properties && feature.properties.proceso === 'Movimiento en Masa') {
+                            if (feature.properties && feature.properties.Proceso === 'Movimiento en Masa') {
                                 layer.setStyle({
                                     color: 'red',
                                     weight: 2,
                                     fillOpacity: 0.6
                                 });
-                            } else if (feature.properties && feature.properties.proceso === 'Erosión') {
+                            } else if (feature.properties && feature.properties.Proceso === 'Erosión') {
                                 layer.setStyle({
                                     color: '#c8684a',
                                     weight: 2,
