@@ -61,7 +61,7 @@ body{
 
   .content-list.first {
     padding-top: 10px;
-    border-top: dotted 1px white;
+    border-top: dotted 1px rgb(0, 0, 0);
   }
   .content-list.est {
     padding-left: 40px;
@@ -123,6 +123,10 @@ body{
   
   .content-list .slidecontainer {
     width: 95%;
+  }
+  
+  .content-list .slidecontainer p{
+    margin-bottom: 0;
   }
   
   .content-list .sliderb {

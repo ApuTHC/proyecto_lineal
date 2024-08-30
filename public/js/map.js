@@ -85,17 +85,38 @@
                 fillColor: '#f0300000',
                 weight: 1, 
                 fillOpacity: 0.5,
+                onEachFeature: function (feature, layer) {
+                    if (feature.properties) {
+                        layer.bindPopup(Object.keys(feature.properties).map(function (k) {
+                            return k + ": " + feature.properties[k];
+                        }).join("<br />"), {
+                            maxHeight: 200
+                        });
+                    }
+                }
               }),
             new Mapa(null,'cuenca','Cuencas Torrenciales',0,0,0.5,cuencas, [],{
                 color: '#149ece',
                 fillColor: '#f0300000',
                 fillOpacity: 0.5,
                 weight: 1, 
+                
+                    onEachFeature: function (feature, layer) {
+                        if (feature.properties) {
+                            layer.bindPopup(Object.keys(feature.properties).map(function (k) {
+                                return k + ": " + feature.properties[k];
+                            }).join("<br />"), {
+                                maxHeight: 200
+                            });
+                        }
+                    }
               }),
             new Mapa(null,'invPoint','Inventario Puntos',4,0,0.5,inv_point, [],{}),
             new Mapa(null,'invPoly','Inventario Poligonos',3,0,0.5,inv_poly, [],{}),
             new Mapa(null,'invne','Inventario Lineas',3,0,0.5,inv_line, [],{}),
             new Mapa(null,'invExt','Inventario Info Secundaria',2,0,0.5,eventos_externos, [],{}),
+            new Mapa(null,'cover','Coberturas 2024',5,0,0.5,'https://tiles.arcgis.com/tiles/gTVMpnerZFjZtXQb/arcgis/rest/services/Coberturas2024/MapServer', [],{}),
+            new Mapa(null,'changecover','Cambio de Coberturas',5,0,0.5,'https://tiles.arcgis.com/tiles/gTVMpnerZFjZtXQb/arcgis/rest/services/Cambio_Coberturas/MapServer', [],{}),
             new Mapa(null,'geo','Geología',1,0,0.5,'https://services7.arcgis.com/gTVMpnerZFjZtXQb/arcgis/rest/services/Geologia_final/FeatureServer/0', ["FID", "Geo"],{}),
             new Mapa(null,'geomorfo','Geomorfología',1,0,0.5,'https://services7.arcgis.com/gTVMpnerZFjZtXQb/arcgis/rest/services/Geomorfologia_final/FeatureServer/0', ["FID", "Geoforma"],{}),
           ];
@@ -193,6 +214,12 @@
                     }
                 })
             }
+            else if(insumosGenerales[i].aux == 5){
+                insumosGenerales[i].capa = insumosGenerales[i].capa = L.esri.tiledMapLayer({
+                    url: insumosGenerales[i].url,
+                    maxZoom:25
+                  });
+            }
 
             // overlays.push({name: insumosGenerales[i].name, layer: insumosGenerales[i].capa});
 
@@ -207,8 +234,13 @@
                 '<div class="slidecontainer">'+
                     '<input type="range" min="0" max="100" value="50" class="sliderb" id="transp_'+insumosGenerales[i].alias+'_'+i+'">'+
                     '<p>Transparencia: <span id="valTransp_'+insumosGenerales[i].alias+'_'+i+'"></span>%</p>'+
-                '</div>'+
-            '</li>';
+                '</div>';
+
+                if (insumosGenerales[i].aux == 5) {
+                    content += '<img src="img/'+insumosGenerales[i].alias+'.png" alt="Coberturas 2024" style="width:20%">';
+                }
+
+                content += '</li>';
 
             $("#capasContent").append(content);
 
@@ -221,7 +253,12 @@
             output.innerHTML = this.value;
             insumosGenerales[id].transp = (100 - parseInt(this.value)) / 100;
             if (insumosGenerales[id].capa != null && insumosGenerales[id].active == 1) {
-                insumosGenerales[id].capa.setStyle({fillOpacity : insumosGenerales[id].transp});
+                if(insumosGenerales[i].aux == 5){
+                    insumosGenerales[id].capa.setOpacity(insumosGenerales[id].transp);
+                }
+                else {
+                    insumosGenerales[id].capa.setStyle({fillOpacity : insumosGenerales[id].transp});
+                }
             }
             } 
 
